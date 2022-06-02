@@ -36,14 +36,15 @@ class ParentController extends Controller
             $Parent->email = $request->email;
             $Parent->password = Hash::make($request->password);
             $Parent->save();
-
+           /*
             foreach ($request->phoneNumbers as $phoneNumber) {
                 $Phone = new ParentPhoneNumbers;
                 $Phone->type = $phoneNumber['type'];
                 $Phone->phoneNumber = $phoneNumber['phoneNumber'];
                 $Parent->phone_numbers()->save($Phone);
             }
-            return $this->returnData('Parent Id', $Parent->id, ' Paresnts details created successfully');
+            */
+            return $this->returnData('Parent Id', $request->phoneNumbers, ' Paresnts details created successfully');
         } catch (Throwable $e) {
             return $this->returnError('Something was wrong, please try again late');
         }
