@@ -38,12 +38,11 @@ class ParentController extends Controller
             $Parent->save();
 
             foreach ($request->phoneNumbers as $phoneNumber) {
-                
+
                 $Phone = new ParentPhoneNumbers;
                 $Phone->type = $phoneNumber['type'];
                 $Phone->phoneNumber = $phoneNumber['phoneNumber'];
-                return $this->returnData('Parent Id',$phoneNumber['type'], ' Paresnts details created successfully');
-              //  $Parent->phone_numbers()->save($Phone);
+                $Parent->phone_numbers()->save($Phone);
             }
             return $this->returnData('Parent Id', $request->phoneNumbers, ' Paresnts details created successfully');
         } catch (Throwable $e) {
