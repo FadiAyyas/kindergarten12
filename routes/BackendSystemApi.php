@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 $backendSystem = [
     'namespace' => 'App\Http\Controllers\Api\BackendSystem',
-    'middleware' => ['checkPasswd']
+    'middleware' => ['checkPasswd','cors']
 ];
 
 Route::group($backendSystem, function () {
