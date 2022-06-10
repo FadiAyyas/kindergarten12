@@ -101,6 +101,7 @@ Route::group($backendSystem, function () {
     Route::post('/deleteBus/{Bus_id}', 'ChildrensController@deleteBus');
 
     //subjects Route
+    Route::post('/showSubject', 'SubjectsController@index');
     Route::post('/storeSubject', 'SubjectsController@store');
     Route::post('/updateSubject/{id}', 'SubjectsController@update');
     Route::post('/deleteSubject/{id}', 'SubjectsController@destroy');

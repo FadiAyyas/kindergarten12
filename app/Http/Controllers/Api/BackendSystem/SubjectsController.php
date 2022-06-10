@@ -12,6 +12,17 @@ use Throwable;
 class SubjectsController extends Controller
 {
     use GeneralTrait;
+
+    public function index()
+    {
+        try {
+            $details = Subjects::all();
+            return $this->returnData('details', $details, ' Subjects details ');
+        } catch (Throwable $e) {
+            return $this->returnError('Something was wrong, please try again ');
+        }
+    }
+
     public function store(SubjectsRequest $request)
     {
         $input = $request->all();
