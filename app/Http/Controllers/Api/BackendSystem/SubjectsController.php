@@ -16,8 +16,6 @@ class SubjectsController extends Controller
     public function index()
     {
         try {
-            //$details = Subjects::all();
-
             $details = Season_year::join("subjects", "season_year_id", "=", "season_years.id")
             ->join("levels", "levels.id", "=", "subjects.level_id")
             ->get([
@@ -25,7 +23,7 @@ class SubjectsController extends Controller
                 'season_years.year as season_year', 'season_years.seasonStartDate', 'season_years.seasonEndDate',
                 'subjects.subject_name'
             ]);
-
+            
             return $this->returnData('details', $details, ' Subjects details ');
         } catch (Throwable $e) {
             return $this->returnError('Something was wrong, please try again ');
