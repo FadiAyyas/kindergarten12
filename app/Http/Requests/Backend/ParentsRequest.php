@@ -21,7 +21,7 @@ class ParentsRequest extends FormRequest
             'fatherLastName' => ['required', 'max:24', 'string'],
         ];
 
-        if (!$this->id) {
+        if (!$this->parent_id) {
             $rules += ['phoneNumbers.*.type'=>['required', 'string']];
             $rules += ['phoneNumbers.*.phoneNumber'=>['required', 'numeric','min:6']];
             $rules += ['email' => ['required', 'email','unique:parents,email']];
