@@ -21,7 +21,7 @@ class SubjectsController extends Controller
             ->get([
                 'levels.id as level_id', 'levels.level_name',
                 'season_years.year as season_year', 'season_years.seasonStartDate', 'season_years.seasonEndDate',
-                'subjects.id','subjects.subject_name'
+                'subjects.id subject_id','subjects.subject_name'
             ]);
 
             return $this->returnData('details', $details, ' Subjects details ');
