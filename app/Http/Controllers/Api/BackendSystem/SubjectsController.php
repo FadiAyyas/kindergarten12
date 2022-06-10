@@ -19,11 +19,11 @@ class SubjectsController extends Controller
             $details = Season_year::join("subjects", "season_year_id", "=", "season_years.id")
             ->join("levels", "levels.id", "=", "subjects.level_id")
             ->get([
-                'levels.id', 'levels.level_name',
+                'levels.id as level_id', 'levels.level_name',
                 'season_years.year as season_year', 'season_years.seasonStartDate', 'season_years.seasonEndDate',
-                'subjects.subject_name'
+                'subjects.id','subjects.subject_name'
             ]);
-            
+
             return $this->returnData('details', $details, ' Subjects details ');
         } catch (Throwable $e) {
             return $this->returnError('Something was wrong, please try again ');
