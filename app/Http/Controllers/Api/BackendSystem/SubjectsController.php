@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\BackendSystem;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Season_year;
 use App\Http\Requests\Backend\SubjectsRequest;
 use App\Models\Subjects;
 use App\Http\Traits\GeneralTrait;
@@ -16,7 +16,16 @@ class SubjectsController extends Controller
     public function index()
     {
         try {
-            $details = Subjects::all();
+            //$details = Subjects::all();
+
+            $details = Season_year::join("subjects", "season_year_id", "=", "season_years.id")
+            ->join("levels", "levels.id", "=", "subjects.level_id")
+            ->get([
+                'levels.id', 'levels.level_name',
+                'season_years.year as season_year', 'season_years.seasonStartDate', 'season_years.seasonEndDate',
+                'subjects.subject_name'
+            ]);
+
             return $this->returnData('details', $details, ' Subjects details ');
         } catch (Throwable $e) {
             return $this->returnError('Something was wrong, please try again ');
