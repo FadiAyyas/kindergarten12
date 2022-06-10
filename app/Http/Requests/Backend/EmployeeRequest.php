@@ -36,7 +36,6 @@ class EmployeeRequest extends FormRequest
             'role' => ['required', 'string'],
             'age' => ['required', 'numeric'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'string','min:8'],
 
         ];
 
