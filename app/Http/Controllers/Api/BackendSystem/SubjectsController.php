@@ -20,7 +20,7 @@ class SubjectsController extends Controller
             ->join("levels", "levels.id", "=", "subjects.level_id")
             ->get([
                 'levels.id as level_id', 'levels.level_name',
-                'season_years.year as season_year', 'season_years.seasonStartDate', 'season_years.seasonEndDate',
+                'season_years.id as season_year_id','season_years.year as season_year', 'season_years.seasonStartDate', 'season_years.seasonEndDate',
                 'subjects.id as subject_id','subjects.subject_name'
             ]);
 
