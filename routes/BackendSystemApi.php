@@ -107,20 +107,3 @@ Route::group($backendSystem, function () {
     Route::post('/deleteSubject/{id}', 'SubjectsController@destroy');
 });
 
-
-$credentials = [
-    'namespace' => 'App\Http\Controllers\Api',
-    'middleware' => ['checkPasswd', 'CheckToken:employee_api'],
-];
-
-Route::group(['middleware' => ['checkPasswd', 'auth.guard:employee_api'], 'namespace' => 'App\Http\Controllers\Api',], function () {
-
-    Route::post('/login', 'EmployeeAuthController@login');
-});
-
-Route::group($credentials, function () {
-
-    Route::post('/logout', 'EmployeeAuthController@logout');
-    Route::post('/refresh', 'EmployeeAuthController@refresh');
-    Route::post('/user-profile', 'EmployeeAuthController@userProfile');
-});
