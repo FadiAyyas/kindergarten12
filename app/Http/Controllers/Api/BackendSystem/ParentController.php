@@ -38,6 +38,7 @@ class ParentController extends Controller
             $Parent->save();
 
             foreach ($request->phoneNumbers as $phoneNumber) {
+
                 $Phone = new ParentPhoneNumbers;
                 $Phone->type = $phoneNumber['type'];
                 $Phone->phoneNumber = $phoneNumber['phoneNumber'];

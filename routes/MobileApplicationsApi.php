@@ -23,3 +23,6 @@ Route::group($credentials, function () {
     Route::post('/abcenseRecording', 'ParentApplicationController@abcenseRecording');
     /* Parent application routes end */
 });
+
+
+

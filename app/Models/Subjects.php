@@ -13,7 +13,7 @@ class Subjects extends Model
 
     protected $fillable = [
         'level_id',
-        'season_id',
+        'season_year_id',
         'subject_name'
     ];
 }

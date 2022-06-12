@@ -53,6 +53,12 @@ return [
             'hash' => false,
         ],
 
+        'parent_api' => [
+            'driver' => 'jwt',
+            'provider' => 'parents',
+            'hash' => false,
+        ],
+
     ],
 
     /*
@@ -73,6 +79,11 @@ return [
     */
 
     'providers' => [
+
+        'parents' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\ParentCh::class,
+        ],
 
         'employees' => [
             'driver' => 'eloquent',

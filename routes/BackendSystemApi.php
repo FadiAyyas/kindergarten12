@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 $backendSystem = [
     'namespace' => 'App\Http\Controllers\Api\BackendSystem',
-    'middleware' => ['checkPasswd']
+    'middleware' => ['checkPasswd','cors']
 ];
 
 Route::group($backendSystem, function () {
@@ -101,25 +101,9 @@ Route::group($backendSystem, function () {
     Route::post('/deleteBus/{Bus_id}', 'ChildrensController@deleteBus');
 
     //subjects Route
+    Route::post('/showSubject', 'SubjectsController@index');
     Route::post('/storeSubject', 'SubjectsController@store');
     Route::post('/updateSubject/{id}', 'SubjectsController@update');
     Route::post('/deleteSubject/{id}', 'SubjectsController@destroy');
 });
 
-
-$credentials = [
-    'namespace' => 'App\Http\Controllers\Api',
-    'middleware' => ['checkPasswd', 'CheckToken:employee_api'],
-];
-
-Route::group(['middleware' => ['checkPasswd', 'auth.guard:employee_api'], 'namespace' => 'App\Http\Controllers\Api',], function () {
-
-    Route::post('/login', 'EmployeeAuthController@login');
-});
-
-Route::group($credentials, function () {
-
-    Route::post('/logout', 'EmployeeAuthController@logout');
-    Route::post('/refresh', 'EmployeeAuthController@refresh');
-    Route::post('/user-profile', 'EmployeeAuthController@userProfile');
-});

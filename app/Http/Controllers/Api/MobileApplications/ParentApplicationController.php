@@ -12,7 +12,6 @@ use App\Models\Employee;
 use App\Models\Evaluation;
 use App\Models\Gallery;
 use App\Models\KgContact;
-use Illuminate\Support\Facades\auth;
 use App\Models\ParentChildAbsence;
 use App\Models\Registration;
 use Throwable;

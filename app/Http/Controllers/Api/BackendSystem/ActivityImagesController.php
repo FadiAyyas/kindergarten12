@@ -15,7 +15,6 @@ class ActivityImagesController extends Controller
 
     public function store(ImagesRequest $request)
     {
-
         try {
             $input = $request->all();
             $input['image_path'] = $this->uploadImage('ActivityImages',  $input['image_path'], 'Kindergarten/ActivityImages/');

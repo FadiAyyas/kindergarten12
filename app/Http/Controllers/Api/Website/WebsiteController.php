@@ -3,18 +3,13 @@
 namespace App\Http\Controllers\Api\Website;
 
 use App\Http\Controllers\Controller;
-
-use App\Models\Level_season_cost;
-use App\Models\Level;
 use App\Models\Season_year;
-
 use App\Http\Traits\GeneralTrait;
 use App\Models\Gallery;
 use App\Models\KgContact;
 use App\Models\Services;
 use App\Models\ActivityPhotos;
 use App\Models\Kindergarten;
-use Illuminate\Support\Facades\DB;
 
 class WebsiteController extends Controller
 {

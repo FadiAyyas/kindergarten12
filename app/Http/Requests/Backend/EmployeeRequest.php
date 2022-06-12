@@ -36,12 +36,12 @@ class EmployeeRequest extends FormRequest
             'role' => ['required', 'string'],
             'age' => ['required', 'numeric'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'string','min:8'],
 
         ];
 
         if (!$this->id) {
             $rules += ['photo' => ['required', 'file', 'mimes:jpg,jpeg,png,gif', 'max:3000']];
+            $rules += ['password' => ['required', 'string','min:8']];
         }
         switch ($this->method()) {
             case 'POST': {
