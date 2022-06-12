@@ -7,6 +7,9 @@ use App\Http\Requests\MobileApplications\parentChildAbcenceRequest;
 use App\Http\Traits\GeneralTrait;
 use App\Models\Activity;
 use App\Models\Children;
+use App\Models\ChildSubjectEval;
+use App\Models\Employee;
+use App\Models\Evaluation;
 use App\Models\Gallery;
 use App\Models\KgContact;
 use Illuminate\Support\Facades\auth;
@@ -19,8 +22,92 @@ class ParentApplicationController extends Controller
     use GeneralTrait;
     public function getChildren()
     {
+        try {
+            $children = Children::where('parent_id', 2)->get(['id', 'childName', 'ChildImage']);
+            return $this->returnData('children', $children, ' children ');
+        } catch (Throwable $e) {
+            return $this->returnError('هناك مشكلة ما , يرجى المحاولة مرة اخرى في وقت لاحق');
+        }
     }
 
+    public function getChildInfo($child_id)
+    {
+        try {
+            $registration = Registration::latest('id')->where('child_id', $child_id)->first();
+            $children = Children::join("registrations", "registrations.child_id", "=", "childrens.id")
+                ->join("Kgclasses", "Kgclasses.id", "=", "registrations.class_id")
+                ->join("levels", "levels.id", "=", "Kgclasses.level_id")
+                ->where('registrations.id', $registration->id)
+                ->get([
+                    'childrens.id', 'childrens.childName', 'childrens.ChildImage',
+                    'Kgclasses.class_name', 'levels.level_name'
+                ]);
+            return $this->returnData('childInfo', $children, ' children info');
+        } catch (Throwable $e) {
+            return $this->returnError('هناك مشكلة ما , يرجى المحاولة مرة اخرى في وقت لاحق');
+        }
+    }
+
+    public function getEvaluations($child_id)
+    {
+        try {
+            $registration = Registration::latest('id')->where('child_id', $child_id)->first();
+            $eval = Evaluation::where('registration_id', $registration->id)->get(['behavioral', 'social']);
+            return $this->returnData('evaluations', $eval, ' evaluations ');
+        } catch (Throwable $e) {
+            return $this->returnError('هناك مشكلة ما , يرجى المحاولة مرة اخرى في وقت لاحق');
+        }
+    }
+
+    public function getSubjectEvaluations($child_id)
+    {
+        try {
+            $registration = Registration::latest('id')->where('child_id', $child_id)->first();
+            $subjectsEval = ChildSubjectEval::join("subjects", "subjects.id", "=", "child_subject_evals.subject_id")
+                ->where('child_subject_evals.registration_id', $registration->id)
+                ->get(['subjects.subject_name', 'child_subject_evals.evaluation']);
+
+            return $this->returnData('subjectsEval', $subjectsEval, ' subjects evaluation ');
+        } catch (Throwable $e) {
+            return $this->returnError('هناك مشكلة ما , يرجى المحاولة مرة اخرى في وقت لاحق');
+        }
+    }
+    public function getTeacher($child_id)
+    {
+        try {
+            $registration = Registration::latest('id')->where('child_id', $child_id)->first();
+            $teacher = Employee::join("teacher_classes", "teacher_classes.employee_id", "=", "employees.id")
+                ->join("Kgclasses", "Kgclasses.id", "=", "teacher_classes.class_id")
+                ->join("registrations", "registrations.class_id", "=", "Kgclasses.id")
+                ->where('registrations.id', $registration->id)
+                ->get([
+                    'employees.firstName', 'employees.lastName', 'employees.photo',
+                    'employees.phoneNumber'
+                ]);
+
+            return $this->returnData('techer', $teacher, ' teacher');
+        } catch (Throwable $e) {
+            return $this->returnError('هناك مشكلة ما , يرجى المحاولة مرة اخرى في وقت لاحق');
+        }
+    }
+
+    public function getBusSuperVisor($child_id){
+        try {
+            $registration = Registration::latest('id')->where('child_id', $child_id)->first();
+            $busSupervisor = Employee::join("buses", "buses.employee_id", "=", "employees.id")
+                ->join("bus_children", "bus_children.bus_id", "=", "buses.id")
+                ->join("registrations", "registrations.id", "=", "bus_children.registration_id")
+                ->where('registrations.id', $registration->id)
+                ->get([
+                    'employees.firstName', 'employees.lastName', 'employees.photo',
+                    'employees.phoneNumber', 'buses.busTypeName', 'buses.plateNumber'
+                ]);
+
+            return $this->returnData('busSupervisor', $busSupervisor, ' bus supervisor ');
+        } catch (Throwable $e) {
+            return $this->returnError('هناك مشكلة ما , يرجى المحاولة مرة اخرى في وقت لاحق');
+        }
+    }
     public function getKgContact()
     {
         try {
@@ -40,6 +127,7 @@ class ParentApplicationController extends Controller
             return $this->returnError('هناك مشكلة ما , يرجى المحاولة مرة اخرى في وقت لاحق');
         }
     }
+
     public function getKgImages()
     {
         try {
@@ -49,6 +137,7 @@ class ParentApplicationController extends Controller
             return $this->returnError('هناك مشكلة ما , يرجى المحاولة مرة اخرى في وقت لاحق');
         }
     }
+
     public function abcenseRecording(parentChildAbcenceRequest $request)
     {
         $registration = Registration::latest('id')->where('child_id', $request->child_id)->first();
