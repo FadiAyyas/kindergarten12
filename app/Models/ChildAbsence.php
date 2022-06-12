@@ -13,8 +13,7 @@ class ChildAbsence extends Model
 
     protected $fillable = [
         'registration_id',
-        'date',
-        'reasonOfAbsence'
+        'date'
     ];
 
     protected $hidden = [

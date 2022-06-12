@@ -17,7 +17,6 @@ class CreateChildAbsencesTable extends Migration
             $table->increments('id');
             $table->integer('registration_id')->unsigned();
             $table->date('date');
-            $table->string('reasonOfAbsence');
             $table->timestamps();
             $table->foreign('registration_id')->references('id')->on('registrations')->onDelete('cascade');
         });

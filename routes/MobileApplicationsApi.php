@@ -22,7 +22,9 @@ Route::group($credentials, function () {
     Route::post('/getKgImages', 'ParentApplicationController@getKgImages');
     Route::post('/abcenseRecording', 'ParentApplicationController@abcenseRecording');
     /* Parent application routes end */
+
+    /* Teacher application routes end */
+    Route::post('/getClassChildren', 'TeacherApplicationController@getClassChildren');
+    Route::post('/childAbsence', 'TeacherApplicationController@childAbsence');
+    /* Teacher application routes end */
 });
-
-
-

@@ -14,6 +14,7 @@ use App\Models\Gallery;
 use App\Models\KgContact;
 use App\Models\ParentChildAbsence;
 use App\Models\Registration;
+use App\Models\Season_year;
 use Throwable;
 
 class ParentApplicationController extends Controller
@@ -22,7 +23,12 @@ class ParentApplicationController extends Controller
     public function getChildren()
     {
         try {
-            $children = Children::where('parent_id', 2)->get(['id', 'childName', 'ChildImage']);
+            $season_year = Season_year::latest('id')->first();
+            $children = Registration::join("childrens", "childrens.id", "=", "registrations.child_id")
+                ->where('registrations.season_year_id', $season_year->id)
+                ->where('childrens.parent_id', 1)
+                ->get(['childrens.id', 'childrens.childName', 'childrens.ChildImage']);
+
             return $this->returnData('children', $children, ' children ');
         } catch (Throwable $e) {
             return $this->returnError('هناك مشكلة ما , يرجى المحاولة مرة اخرى في وقت لاحق');
