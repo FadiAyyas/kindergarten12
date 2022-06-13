@@ -33,7 +33,7 @@ class ChildrensController extends Controller
     {
 
 
-        $data =json_decode($request->getContent(),true);
+        $data =json_decode($request->Dataa,true);
         return $this->returnData('details', $data, 'Father Childrens details ');
 
 
