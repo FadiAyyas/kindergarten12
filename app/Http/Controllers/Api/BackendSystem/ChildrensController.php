@@ -31,9 +31,9 @@ class ChildrensController extends Controller
     //Registration childrens
     public function store(ChildrensRequest $request, $parent_id)
     {
-        $data =$request->getContent();
+       // $data =$request->getContent();
 
-        return $this->returnData('details', $data, 'Father Childrens details ');
+        return $this->returnData('details',  $request, 'Father Childrens details ');
 
         try {
             $parent = ParentCh::findOrFail($parent_id);
