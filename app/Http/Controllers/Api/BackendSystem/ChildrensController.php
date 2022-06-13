@@ -33,7 +33,7 @@ class ChildrensController extends Controller
     {
        // $data =$request->getContent();
 
-        return $this->returnData('details',  $request, 'Father Childrens details ');
+        return $this->returnData('details',  $request->childrens, 'Father Childrens details ');
 
         try {
             $parent = ParentCh::findOrFail($parent_id);
