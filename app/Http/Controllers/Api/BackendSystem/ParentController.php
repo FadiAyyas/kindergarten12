@@ -44,7 +44,7 @@ class ParentController extends Controller
                 $Phone->phoneNumber = $phoneNumber['phoneNumber'];
                 $Parent->phone_numbers()->save($Phone);
             }
-            return $this->returnData('Parent Id', $Parent->id, ' Paresnts details created successfully');
+            return $this->returnData('Parent_id', $Parent->id, ' Paresnts details created successfully');
         } catch (Throwable $e) {
             return $this->returnError('Something was wrong, please try again late');
         }
