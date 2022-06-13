@@ -10,6 +10,10 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Traits\GeneralTrait;
 use App\Http\Requests\Backend\AuthRequest;
 
+use App\Models\ParentCh;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+
 class ParentAuthController extends Controller
 {
     use GeneralTrait;
@@ -59,6 +63,26 @@ class ParentAuthController extends Controller
             'expires_in' => JWTAuth::factory()->setTTL(60 * 24),
             'token' => $token,
         ]);
+    }
+
+    public function changePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => 'min:8|required_with:password_confirmation|same:password_confirmation',
+            'password_confirmation' => 'min:8'
+        ]);
+
+        $Parent=Auth::user();
+        $ParentId= $Parent->id;
+
+        if ($validator->fails()) {
+            return $this->returnError($validator->errors());
+        } else {
+            $data = ParentCh::findOrFail($ParentId);
+            $data->password = Hash::make($request->password);
+            $data->save();
+            return $this->returnSuccessMessage(' Password  changed successfully ');
+        }
     }
 
 }

@@ -14,6 +14,7 @@ Route::group(['middleware' => ['checkPasswd', 'auth.guard:parent_api'], 'namespa
 
 Route::group($credentialsAuthParent, function () {
 
+    Route::post('/parent-changePassword', 'ParentAuthController@changePassword');
     Route::post('/parent-logout', 'ParentAuthController@logout');
     Route::post('/parent-refresh', 'ParentAuthController@refresh');
     Route::post('/parent-user-profile', 'ParentAuthController@userProfile');
@@ -33,6 +34,7 @@ Route::group(['middleware' => ['checkPasswd', 'auth.guard:employee_api'], 'names
 
 Route::group($credentialsAuthEmployee, function () {
 
+    Route::post('/employee-changePassword', 'EmployeeAuthController@changePassword');
     Route::post('/employee-logout', 'EmployeeAuthController@logout');
     Route::post('/employee-refresh', 'EmployeeAuthController@refresh');
     Route::post('/employee-user-profile', 'EmployeeAuthController@userProfile');

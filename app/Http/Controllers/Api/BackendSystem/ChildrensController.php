@@ -99,8 +99,7 @@ class ChildrensController extends Controller
     public function showChildAbsence($child_id)
     {
         try {
-
-            $registration = Registration::where('child_id', $child_id)->get()->first();
+            $registration = Registration::latest('id')->where('child_id', $child_id)->first();
             $details = $registration->childAbsence;
 
             return $this->returnData('details', $details, 'Child Absence details ');
@@ -114,8 +113,7 @@ class ChildrensController extends Controller
     public function showChildEvaluations($child_id)
     {
         try {
-
-            $registration = Registration::where('child_id', $child_id)->get()->first();
+            $registration = Registration::latest('id')->where('child_id', $child_id)->first();
             $details = $registration->childEvaluation;
 
             return $this->returnData('details', $details, 'Child Absence details ');
