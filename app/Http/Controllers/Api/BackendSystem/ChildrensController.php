@@ -32,8 +32,8 @@ class ChildrensController extends Controller
     public function store(ChildrensRequest $request, $parent_id)
     {
        // $data =$request->getContent();
-
-        return $this->returnData('details',  $request->childrens, 'Father Childrens details ');
+       $data =json_decode($request->getContent(),true);
+        return $this->returnData('details',$data, 'Father Childrens details ');
 
         try {
             $parent = ParentCh::findOrFail($parent_id);
