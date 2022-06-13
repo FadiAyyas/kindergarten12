@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 $credentialsAuthParent = [
     'namespace' => 'App\Http\Controllers\Api',
-    'middleware' => ['checkPasswd', 'CheckToken:parent_api'],
+    'middleware' => ['CheckToken:parent_api'],
 ];
 
 Route::group(['middleware' => ['checkPasswd', 'auth.guard:parent_api'], 'namespace' => 'App\Http\Controllers\Api',], function () {
@@ -24,7 +24,7 @@ Route::group($credentialsAuthParent, function () {
 
 $credentialsAuthEmployee = [
     'namespace' => 'App\Http\Controllers\Api',
-    'middleware' => ['checkPasswd', 'CheckToken:employee_api'],
+    'middleware' => ['CheckToken:employee_api'],
 ];
 
 Route::group(['middleware' => ['checkPasswd', 'auth.guard:employee_api'], 'namespace' => 'App\Http\Controllers\Api',], function () {

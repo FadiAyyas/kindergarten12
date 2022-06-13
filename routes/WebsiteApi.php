@@ -22,7 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 $webSite = [
     'namespace' => 'App\Http\Controllers\Api\Website',
-    'middleware'=>'checkPasswd'
 ];
 
 Route::group($webSite, function () {
