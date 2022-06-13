@@ -70,7 +70,6 @@ Route::group($backendSystem, function () {
     Route::post('/storeParentsDetails', 'ParentController@store');
     Route::post('/updateParentsDetails/{parent_id}', 'ParentController@updateParentDetails');
     Route::post('/updateParentContactsDetails/{phone_id}', 'ParentController@updateParentContactsDetails');
-    Route::post('/updateParentPasswordDetails/{parent_id}', 'ParentController@changeParentPassword');
     Route::post('/deleteParentsDetails/{parent_id}', 'ParentController@destroy');
 
     //Childrens Route

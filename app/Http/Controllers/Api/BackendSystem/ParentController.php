@@ -85,23 +85,6 @@ class ParentController extends Controller
         }
     }
 
-
-    public function changeParentPassword(Request $request, $parent_id)
-    {
-        $validator = Validator::make($request->all(), [
-            'password' => 'min:8|required_with:password_confirmation|same:password_confirmation',
-            'password_confirmation' => 'min:8'
-        ]);
-        if ($validator->fails()) {
-            return $this->returnError($validator->errors());
-        } else {
-            $data = ParentCh::findOrFail($parent_id);
-            $data->password = Hash::make($request->password);
-            $data->save();
-            return $this->returnSuccessMessage('Parent Password  changed successfully ');
-        }
-    }
-
     public function destroy($parent_id)
     {
         try {
