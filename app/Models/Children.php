@@ -13,7 +13,6 @@ class Children extends Model
     protected $hidden = [
         'created_at',
         'updated_at',
-        'parent_id'
     ];
     protected $fillable = [
         'childName',

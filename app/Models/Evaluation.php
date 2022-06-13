@@ -13,17 +13,17 @@ class Evaluation extends Model
 
     protected $fillable = [
         'behavioral',
-        'social'
+        'social',
+        'registration_id'
     ];
     protected $hidden = [
         'created_at',
         'updated_at',
-        'registration_id'
+
     ];
 
     public function registration()
     {
-        return $this->belongsTo(Registration::class,'registration_id');
+        return $this->belongsTo(Registration::class, 'registration_id');
     }
-
 }

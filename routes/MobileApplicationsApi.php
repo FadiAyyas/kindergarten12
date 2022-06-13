@@ -26,5 +26,14 @@ Route::group($credentials, function () {
     /* Teacher application routes end */
     Route::post('/getClassChildren', 'TeacherApplicationController@getClassChildren');
     Route::post('/childAbsence', 'TeacherApplicationController@childAbsence');
+    Route::post('/setChildEval', 'TeacherApplicationController@setChildEval');
+    Route::post('/getSeasonSubjects/{child_id}', 'TeacherApplicationController@getSeasonSubjects');
+    Route::post('/setSubjectChildEval/{child_id}', 'TeacherApplicationController@setSubjectChildEval');
     /* Teacher application routes end */
+
+    /* Bus Supervisor application routes end */
+    Route::post('/getBusChildren', 'BusSupervisorApplicationController@getBusChildren');
+    Route::post('/getBusItinerary', 'BusSupervisorApplicationController@getBusItinerary');
+    Route::post('/getParentPhoneNumbers/{child_id}', 'BusSupervisorApplicationController@getParentPhoneNumbers');
+    /* Bus Supervisor application routes end */
 });

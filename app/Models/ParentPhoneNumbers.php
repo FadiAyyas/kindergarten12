@@ -12,16 +12,13 @@ class ParentPhoneNumbers extends Model
     protected $table = 'parent_phone_numbers';
 
     protected $hidden = [
-
         'created_at',
         'updated_at',
-        'parent_id'
     ];
 
     protected $fillable = [
-        'staticNumber',
-        'motherNumber',
-        'fatherNumber',
+        'type',
+        'phoneNumber',
         'parent_id'
     ];
 

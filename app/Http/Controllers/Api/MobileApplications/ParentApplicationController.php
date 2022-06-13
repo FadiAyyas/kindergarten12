@@ -26,7 +26,7 @@ class ParentApplicationController extends Controller
             $season_year = Season_year::latest('id')->first();
             $children = Registration::join("childrens", "childrens.id", "=", "registrations.child_id")
                 ->where('registrations.season_year_id', $season_year->id)
-                ->where('childrens.parent_id', 1)
+                ->where('childrens.parent_id', 1) //auth id
                 ->get(['childrens.id', 'childrens.childName', 'childrens.ChildImage']);
 
             return $this->returnData('children', $children, ' children ');
@@ -38,7 +38,10 @@ class ParentApplicationController extends Controller
     public function getChildInfo($child_id)
     {
         try {
-            $registration = Registration::latest('id')->where('child_id', $child_id)->first();
+            $season_year = Season_year::latest('id')->first();
+            $registration = Registration::where('season_year_id', $season_year->id)
+                ->where('child_id', $child_id)->first();
+
             $children = Children::join("registrations", "registrations.child_id", "=", "childrens.id")
                 ->join("Kgclasses", "Kgclasses.id", "=", "registrations.class_id")
                 ->join("levels", "levels.id", "=", "Kgclasses.level_id")
@@ -56,7 +59,9 @@ class ParentApplicationController extends Controller
     public function getEvaluations($child_id)
     {
         try {
-            $registration = Registration::latest('id')->where('child_id', $child_id)->first();
+            $season_year = Season_year::latest('id')->first();
+            $registration = Registration::where('season_year_id', $season_year->id)
+                ->where('child_id', $child_id)->first();
             $eval = Evaluation::where('registration_id', $registration->id)->get(['behavioral', 'social']);
             return $this->returnData('evaluations', $eval, ' evaluations ');
         } catch (Throwable $e) {
@@ -67,7 +72,9 @@ class ParentApplicationController extends Controller
     public function getSubjectEvaluations($child_id)
     {
         try {
-            $registration = Registration::latest('id')->where('child_id', $child_id)->first();
+            $season_year = Season_year::latest('id')->first();
+            $registration = Registration::where('season_year_id', $season_year->id)
+                ->where('child_id', $child_id)->first();
             $subjectsEval = ChildSubjectEval::join("subjects", "subjects.id", "=", "child_subject_evals.subject_id")
                 ->where('child_subject_evals.registration_id', $registration->id)
                 ->get(['subjects.subject_name', 'child_subject_evals.evaluation']);
@@ -80,12 +87,14 @@ class ParentApplicationController extends Controller
     public function getTeacher($child_id)
     {
         try {
-            $registration = Registration::latest('id')->where('child_id', $child_id)->first();
+            $season_year = Season_year::latest('id')->first();
+            $registration = Registration::where('registrations.season_year_id', $season_year->id)
+                ->where('child_id', $child_id)->first();
             $teacher = Employee::join("teacher_classes", "teacher_classes.employee_id", "=", "employees.id")
                 ->join("Kgclasses", "Kgclasses.id", "=", "teacher_classes.class_id")
                 ->join("registrations", "registrations.class_id", "=", "Kgclasses.id")
                 ->where('registrations.id', $registration->id)
-                ->get([
+                ->first([
                     'employees.firstName', 'employees.lastName', 'employees.photo',
                     'employees.phoneNumber'
                 ]);
@@ -96,14 +105,17 @@ class ParentApplicationController extends Controller
         }
     }
 
-    public function getBusSuperVisor($child_id){
+    public function getBusSuperVisor($child_id)
+    {
         try {
-            $registration = Registration::latest('id')->where('child_id', $child_id)->first();
+            $season_year = Season_year::latest('id')->first();
+            $registration = Registration::where('registrations.season_year_id', $season_year->id)
+                ->where('child_id', $child_id)->first();
             $busSupervisor = Employee::join("buses", "buses.employee_id", "=", "employees.id")
                 ->join("bus_children", "bus_children.bus_id", "=", "buses.id")
                 ->join("registrations", "registrations.id", "=", "bus_children.registration_id")
                 ->where('registrations.id', $registration->id)
-                ->get([
+                ->first([
                     'employees.firstName', 'employees.lastName', 'employees.photo',
                     'employees.phoneNumber', 'buses.busTypeName', 'buses.plateNumber'
                 ]);
@@ -145,7 +157,9 @@ class ParentApplicationController extends Controller
 
     public function abcenseRecording(parentChildAbcenceRequest $request)
     {
-        $registration = Registration::latest('id')->where('child_id', $request->child_id)->first();
+        $season_year = Season_year::latest('id')->first();
+        $registration = Registration::where('registrations.season_year_id', $season_year->id)
+            ->where('child_id', $request->child_id)->first();
         try {
             ParentChildAbsence::create([
                 'startDate' => $request->startDate,
