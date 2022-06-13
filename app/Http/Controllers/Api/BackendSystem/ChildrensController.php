@@ -32,7 +32,7 @@ class ChildrensController extends Controller
     public function store(ChildrensRequest $request, $parent_id)
     {
        // $data =$request->getContent();
-       $data =json_decode($request->getContent(),true);
+       $data =json_decode($request->children,true);
         return $this->returnData('details',$data, 'Father Childrens details ');
 
         try {
