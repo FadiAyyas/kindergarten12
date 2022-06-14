@@ -31,40 +31,33 @@ class ChildrensController extends Controller
     //Registration childrens
     public function store(ChildrensRequest $request, $parent_id)
     {
-       // $data =$request->getContent();
-       $data =json_decode($request->children,true);
-        return $this->returnData('details',$data, 'Father Childrens details ');
-
         try {
             $parent = ParentCh::findOrFail($parent_id);
-            if ($request->childrens) {
-                foreach ($request->childrens as $child) {
-                    $Parentchild = new Children;
-                    $Parentchild->childName = $child['childName'];
-                    $Parentchild->birthDate = $child['birthDate'];
-                    $Parentchild->gender = $child['gender'];
-                    $Parentchild->childAddress = $child['childAddress'];
-                    $Parentchild->medicalNotes = $child['medicalNotes'];
-                    $Parentchild->ChildImage = $this->uploadImage($child['childName'], $child['ChildImage'], 'Childrens/images/');
+            foreach ($request->childrens as $child) {
+                $Parentchild = new Children;
+                $Parentchild->childName = $child['childName'];
+                $Parentchild->birthDate = $child['birthDate'];
+                $Parentchild->gender = $child['gender'];
+                $Parentchild->childAddress = $child['childAddress'];
+                $Parentchild->medicalNotes = $child['medicalNotes'];
+                $Parentchild->ChildImage = $this->uploadImage($child['childName'], $child['ChildImage'], 'Childrens/images/');
 
-                    $chilsRegistration = new Registration;
-                    $chilsRegistration->class_id = $child['class_id'];
-                    $chilsRegistration->season_year_id = $child['season_year_id'];
-                    $chilsRegistration->registrationDate = now();
+                $chilsRegistration = new Registration;
+                $chilsRegistration->class_id = $child['class_id'];
+                $chilsRegistration->season_year_id = $child['season_year_id'];
+                $chilsRegistration->registrationDate = now();
 
-                    DB::transaction(function () use ($parent, $chilsRegistration, $Parentchild) {
-                        $parent->childrens()->save($Parentchild);
-                        $Parentchild->registration()->save($chilsRegistration);
-                    });
-                }
-            } else
-                return $this->returnError('Something was wrong, please try again late');
-
+                DB::transaction(function () use ($parent, $chilsRegistration, $Parentchild) {
+                    $parent->childrens()->save($Parentchild);
+                    $Parentchild->registration()->save($chilsRegistration);
+                });
+            }
             return $this->returnSuccessMessage('Childrens created successfully ');
         } catch (Throwable $e) {
             return $this->returnError($e);
         }
     }
+
     //edit childrens
     public function update(ChildrensRequest $request, $child_id)
     {
