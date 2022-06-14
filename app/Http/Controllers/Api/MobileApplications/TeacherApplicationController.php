@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\MobileApplications;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MobileApplications\childEvalRequest;
 use App\Http\Requests\MobileApplications\childSubjectEvalRequest;
+use App\Http\Requests\MobileApplications\getClassChildrenRequest;
 use App\Http\Requests\MobileApplications\teacherChildAbsenceRequest;
 use App\Models\Employee;
 use App\Models\Registration;
@@ -14,23 +15,55 @@ use App\Models\ChildSubjectEval;
 use App\Models\Evaluation;
 use App\Models\Season_year;
 use App\Models\Subjects;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Throwable;
 
 class TeacherApplicationController extends Controller
 {
     use GeneralTrait;
-    public function getClassChildren()
+    public function getClassChildren(getClassChildrenRequest $request)
     {
         try {
             $season_year = Season_year::latest('id')->first();
             $class_id = Employee::join("teacher_classes", "teacher_classes.employee_id", "=", "employees.id")
                 ->join("Kgclasses", "Kgclasses.id", "=", "teacher_classes.class_id")
-                ->where('employees.id', 2)
+                ->where('employees.id', Auth::user()->id)
                 ->get('Kgclasses.id')->first();
             $children = Registration::join("childrens", "childrens.id", "=", "registrations.child_id")
-                ->where('class_id', $class_id->id)
-                ->where('season_year_id', $season_year->id)
-                ->get(['childrens.id', 'childrens.childName', 'childrens.ChildImage']);
+                ->where('registrations.class_id', $class_id->id)
+                ->where('registrations.season_year_id', $season_year->id)
+                ->get([
+                    'childrens.id', 'childrens.childName',
+                    'childrens.ChildImage'
+                ]);
+
+            foreach ($children as $ch) {
+                $reg_id = Registration::where('child_id', $ch['id'])
+                    ->where('season_year_id', $season_year->id)
+                    ->first('id');
+                $abs = ChildAbsence::where('registration_id', $reg_id->id)
+                    ->where('date', $request->date)->first();
+                $eval = Evaluation::where('registration_id', $reg_id->id)->get(['behavioral', 'social']);
+                $subjectEval = ChildSubjectEval::join('subjects', 'subjects.id', '=', 'child_subject_evals.subject_id')
+                    ->where('child_subject_evals.registration_id', $reg_id->id)
+                    ->get(['subjects.subject_name', 'child_subject_evals.evaluation']);
+                if ($abs == null) {
+                    Arr::add($ch, 'absence', 0);
+                } else {
+                    Arr::add($ch, 'absence', 1);
+                }
+                if (sizeof($eval) != 0) {
+                    Arr::add($ch, 'eval', $eval);
+                } else {
+                    Arr::add($ch, 'eval', 0);
+                }
+                if (sizeof($subjectEval) != 0) {
+                    Arr::add($ch, 'subjectEval', $subjectEval);
+                } else {
+                    Arr::add($ch, 'subjectEval', 0);
+                }
+            }
 
             return $this->returnData('children', $children, ' children ');
         } catch (Throwable $e) {

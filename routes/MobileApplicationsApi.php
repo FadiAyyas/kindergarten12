@@ -4,12 +4,13 @@ use Illuminate\Support\Facades\Route;
 
 
 
-$credentials = [
+$credentialsAuthParent = [
     'namespace' => 'App\Http\Controllers\Api\MobileApplications',
+    'middleware' => ['CheckToken:parent_api'],
 ];
 
 
-Route::group($credentials, function () {
+Route::group($credentialsAuthParent, function () {
     /* Parent application routes start */
     Route::post('/getChildren', 'ParentApplicationController@getChildren');
     Route::post('/getChildInfo/{child_id}', 'ParentApplicationController@getChildInfo');
@@ -22,7 +23,14 @@ Route::group($credentials, function () {
     Route::post('/getKgImages', 'ParentApplicationController@getKgImages');
     Route::post('/abcenseRecording', 'ParentApplicationController@abcenseRecording');
     /* Parent application routes end */
+});
 
+
+$credentialsAuthEmployee = [
+    'namespace' => 'App\Http\Controllers\Api\MobileApplications',
+    'middleware' => ['CheckToken:employee_api'],
+];
+Route::group($credentialsAuthEmployee, function () {
     /* Teacher application routes end */
     Route::post('/getClassChildren', 'TeacherApplicationController@getClassChildren');
     Route::post('/childAbsence', 'TeacherApplicationController@childAbsence');
