@@ -10,11 +10,14 @@ use App\Models\BusChild;
 use Throwable;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Backend\BusesRequest;
+use App\Http\Traits\GeneralTrait;
+use App\Http\Traits\ImageUploadTrait;
+
 
 class BusesController extends Controller
 {
 
-
+    use GeneralTrait, ImageUploadTrait;
     public function showBusItineraries()
     {
         try {
@@ -41,6 +44,7 @@ class BusesController extends Controller
 
     public function storeItinerary(Request $request)
     {
+        $input = $request->all();
         try {
             $validator = Validator::make($request->all(), [
                 'itinerary' => ['required', 'max:255', 'string'],
@@ -49,11 +53,11 @@ class BusesController extends Controller
             if ($validator->fails()) {
                 return $this->returnError($validator->errors());
             }
-            $input = $request->all();
+
             BusItinerary::create($input);
             return $this->returnSuccessMessage('Itinerary data created successfully ');
         } catch (Throwable $e) {
-            return $this->returnError('Something was wrong, please try again late');
+            return $this->returnError($e);
         }
     }
 

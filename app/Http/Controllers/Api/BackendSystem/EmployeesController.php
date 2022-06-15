@@ -91,4 +91,46 @@ class EmployeesController extends Controller
             return $this->returnError($e);
         }
     }
+
+    
+    public function availableTeachers()
+    {
+        try {
+
+            $details = Employee::leftJoin('teacher_classes', function($join) {
+                $join->on('employees.id', '=', 'teacher_classes.employee_id');
+              })
+              ->whereNull('teacher_classes.employee_id')
+              ->where('employees.role','=','معلم')
+              ->get([
+                  'employees.id',
+                  'employees.firstName',
+              ]);
+
+            return $this->returnData('details', $details, 'Available teachers details ');
+        } catch (Throwable $e) {
+            return $this->returnError('Something was wrong, please try again ');
+        }
+    }
+
+
+
+    public function availableBusSupervisors()
+    {
+        try {
+            $details = Employee::leftJoin('buses', function($join) {
+                $join->on('employees.id', '=', 'buses.employee_id');
+              })
+              ->whereNull('buses.employee_id')
+              ->where('employees.role','=','مشرف باص')
+              ->get([
+                  'employees.id',
+                  'employees.firstName',
+              ]);
+
+            return $this->returnData('details', $details, 'Available Bus supervisors details ');
+        } catch (Throwable $e) {
+            return $this->returnError('Something was wrong, please try again ');
+        }
+    }
 }

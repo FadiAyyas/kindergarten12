@@ -43,6 +43,9 @@ Route::group($backendSystem, function () {
     Route::post('/updateEmployeeDetails/{id}', 'EmployeesController@update');
     Route::post('/deleteEmployeeDetails/{id}', 'EmployeesController@destroy');
 
+    Route::post('/available-Teachers', 'EmployeesController@availableTeachers');
+    Route::post('/available-Bus-Supervisors', 'EmployeesController@availableBusSupervisors');
+
     Route::post('/assigningEmployeeClass/{class_id}', 'EmployeesController@assigningEmployeeClass');
 
 

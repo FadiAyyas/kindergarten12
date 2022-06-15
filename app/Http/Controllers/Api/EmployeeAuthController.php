@@ -29,10 +29,15 @@ class EmployeeAuthController extends Controller
             if (!$token = JWTAuth::attempt($credentials)) {
                 return $this->returnError(200, 'Login credentials are invalid.');
             }
+            $role=Employee::where('email', $credentials['email'])->first('role');
         } catch (JWTException $e) {
             return $this->returnError(201, 'Could not create token.');
         }
-        return $this->returnData('token', $token, 'success');
+        $authDetails = array();
+        $authDetails['token']= $token;
+        $authDetails['role']=$role;
+
+        return $this->returnData('details', $authDetails, 'success');
     }
 
     public function logout(Request $request)

@@ -22,7 +22,7 @@ class CreateEmployeesTable extends Migration
             $table->bigInteger('phoneNumber');
             $table->enum('gender', ['ذكر', 'انثى']);
             $table->string('address');
-            $table->enum('role', ['مدير', 'موظف'])->default('موظف');
+            $table->enum('role', ['مدير', 'معلم','مشرف باص'])->default('مدير');
             $table->integer('age');
             $table->string('email')->unique();
             $table->string('password');

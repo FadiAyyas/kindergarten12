@@ -7,7 +7,7 @@ $credentialsAuthParent = [
     'middleware' => ['CheckToken:parent_api'],
 ];
 
-Route::group(['middleware' => ['checkPasswd', 'auth.guard:parent_api'], 'namespace' => 'App\Http\Controllers\Api',], function () {
+Route::group(['middleware' => ['auth.guard:parent_api'], 'namespace' => 'App\Http\Controllers\Api',], function () {
 
     Route::post('/parent-login', 'ParentAuthController@login');
 });
@@ -27,7 +27,7 @@ $credentialsAuthEmployee = [
     'middleware' => ['CheckToken:employee_api'],
 ];
 
-Route::group(['middleware' => ['checkPasswd', 'auth.guard:employee_api'], 'namespace' => 'App\Http\Controllers\Api',], function () {
+Route::group(['middleware' => ['auth.guard:employee_api'], 'namespace' => 'App\Http\Controllers\Api',], function () {
 
     Route::post('/employee-login', 'EmployeeAuthController@login');
 });
