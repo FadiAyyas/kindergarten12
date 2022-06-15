@@ -31,6 +31,7 @@ class ClassRequest extends FormRequest
             'class_name' => ['required', 'max:55' ,'string'],
             'maxCapacity' => ['required', 'max:60','numeric','min:5'],
             'level_id' => ['required', 'max:16','numeric','min:1'],
+            'employee_id' => ['required', 'numeric','unique:teacher_classes,employee_id'],
         ];
         switch ($this->method()) {
             case 'POST': {

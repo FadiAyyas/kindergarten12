@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api\BackendSystem;
 use App\Http\Controllers\Controller;
 use App\Models\KGClass;
 use App\Models\Level;
+use App\Models\Employee;
 use App\Http\Traits\GeneralTrait;
 use App\Http\Requests\Backend\ClassRequest;
 use Throwable;
+use Illuminate\Support\Facades\DB;
 
 class ClassController extends Controller
 {
@@ -16,7 +18,16 @@ class ClassController extends Controller
     public function index()
     {
         try {
-            $classes = KGClass::with('level')->get();
+
+            $classes = Level::Join("Kgclasses", "levels.id", "=", "Kgclasses.level_id")
+            ->Join("teacher_classes", "teacher_classes.class_id", "=", "Kgclasses.id")
+            ->Join("employees", "employees.id", "=", "teacher_classes.employee_id")
+            ->get([
+                'levels.level_name', 'levels.level_minAge', 'levels.level_maxAge',
+                'Kgclasses.id as class_id','Kgclasses.class_name', 'Kgclasses.maxCapacity',
+                'employees.firstName as teacher_fname ','employees.lastName as teacher_lname' ,
+            ])->all();
+            
             return $this->returnData('Classes', $classes, ' Classes details ');
         } catch (Throwable $e) {
             return $this->returnError('Something was wrong, please try again late');
@@ -24,13 +35,18 @@ class ClassController extends Controller
     }
     public function store(ClassRequest $request)
     {
-
         try {
-            $Level = Level::findOrFail($request->level_id);
+            $employee = Employee::findOrFail($request->employee_id);
+            $level = Level::findOrFail($request->level_id);
             $class = new KGClass();
+
             $class->class_name = $request->class_name;
             $class->maxCapacity = $request->maxCapacity;
-            $Level = $Level->classes()->save($class);
+
+            DB::transaction(function () use ($employee, $level, $class) {
+                $level->classes()->save($class);
+                $class->teacher()->save($employee);
+            });
             return $this->returnSuccessMessage('class created successfully ');
         } catch (Throwable $e) {
             return $this->returnError('Something was wrong, please try again late');

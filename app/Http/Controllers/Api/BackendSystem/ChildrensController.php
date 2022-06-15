@@ -32,8 +32,9 @@ class ChildrensController extends Controller
     public function store(ChildrensRequest $request, $parent_id)
     {
         try {
-            $parent = ParentCh::findOrFail($parent_id);
-            foreach ($request->childrens as $child) {
+                $child=$request->all();
+                $parent = ParentCh::findOrFail($parent_id);
+
                 $Parentchild = new Children;
                 $Parentchild->childName = $child['childName'];
                 $Parentchild->birthDate = $child['birthDate'];
@@ -51,7 +52,7 @@ class ChildrensController extends Controller
                     $parent->childrens()->save($Parentchild);
                     $Parentchild->registration()->save($chilsRegistration);
                 });
-            }
+
             return $this->returnSuccessMessage('Childrens created successfully ');
         } catch (Throwable $e) {
             return $this->returnError($e);

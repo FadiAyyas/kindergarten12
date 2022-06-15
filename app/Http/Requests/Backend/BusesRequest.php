@@ -20,9 +20,9 @@ class BusesRequest extends FormRequest
         $rules = [
             'employee_id' => ['required', 'numeric','unique:buses,employee_id'],
             'driverName' => ['required', 'string','max:22'],
-            'driverPhoneNumber' => ['required','max:16', 'numeric'],
+            'driverPhoneNumber' => ['required','min:6', 'numeric'],
             'busTypeName' => ['required', 'string','max:255'],
-            'plateNumber' => ['required','min:6','max:6', 'numeric'],
+            'plateNumber' => ['required','min:6', 'numeric'],
             'busItinerary_id' => ['required', 'numeric'],
         ];
 

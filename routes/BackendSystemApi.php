@@ -99,8 +99,8 @@ Route::group($backendSystem, function () {
 
     Route::post('/registeringChildOnBus/{Bus_id}', 'BusesController@registeringChildOnBus');
 
-    Route::post('/deleteItinerary/{Itinerary_id}', 'ChildrensController@deleteItinerary');
-    Route::post('/deleteBus/{Bus_id}', 'ChildrensController@deleteBus');
+    Route::post('/deleteItinerary/{Itinerary_id}', 'BusesController@deleteItinerary');
+    Route::post('/deleteBus/{Bus_id}', 'BusesController@deleteBus');
 
     //subjects Route
     Route::post('/showSubject', 'SubjectsController@index');
