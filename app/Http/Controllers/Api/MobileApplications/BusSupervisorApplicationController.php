@@ -9,6 +9,7 @@ use App\Models\Children;
 use App\Models\Employee;
 use App\Models\ParentPhoneNumbers;
 use App\Models\Season_year;
+use Illuminate\Support\Facades\Auth;
 use Throwable;
 
 class BusSupervisorApplicationController extends Controller
@@ -19,7 +20,7 @@ class BusSupervisorApplicationController extends Controller
         try {
             $season_year = Season_year::latest('id')->first();
             $bus_id = Employee::join("buses", "buses.employee_id", "=", "employees.id")
-                ->where('employees.id', 3)
+                ->where('employees.id', Auth::user()->id)
                 ->latest('buses.id')->first('buses.id');
 
             $children = BusChild::join("registrations", "registrations.id", "=", "bus_children.registration_id")
@@ -53,7 +54,7 @@ class BusSupervisorApplicationController extends Controller
         try {
             $itinerary = Employee::join("buses", "buses.employee_id", "=", "employees.id")
                 ->join("bus_itineraries", "bus_itineraries.id", "=", "buses.busItinerary_id")
-                ->where('employees.id', 2)
+                ->where('employees.id', Auth::user()->id)
                 ->latest('buses.id')->first('bus_itineraries.itinerary');
 
             return $this->returnData('itinerary', $itinerary->itinerary, 'bus itinerary ');

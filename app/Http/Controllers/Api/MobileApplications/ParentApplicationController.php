@@ -15,6 +15,7 @@ use App\Models\KgContact;
 use App\Models\ParentChildAbsence;
 use App\Models\Registration;
 use App\Models\Season_year;
+use Illuminate\Support\Facades\Auth;
 use Throwable;
 
 class ParentApplicationController extends Controller
@@ -26,7 +27,7 @@ class ParentApplicationController extends Controller
             $season_year = Season_year::latest('id')->first();
             $children = Registration::join("childrens", "childrens.id", "=", "registrations.child_id")
                 ->where('registrations.season_year_id', $season_year->id)
-                ->where('childrens.parent_id', 1) //auth id
+                ->where('childrens.parent_id', Auth::user()->id)
                 ->get(['childrens.id', 'childrens.childName', 'childrens.ChildImage']);
 
             return $this->returnData('children', $children, ' children ');
