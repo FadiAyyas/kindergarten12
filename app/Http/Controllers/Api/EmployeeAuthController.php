@@ -10,6 +10,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Traits\GeneralTrait;
 use App\Http\Requests\Backend\AuthRequest;
 use App\Models\Employee;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -33,11 +34,10 @@ class EmployeeAuthController extends Controller
         } catch (JWTException $e) {
             return $this->returnError(201, 'Could not create token.');
         }
-        $authDetails = array();
-        $authDetails['token']= $token;
-        $authDetails['role']=$role;
 
-        return $this->returnData('details', $authDetails, 'success');
+        Arr::add($role, 'token', $token);
+
+        return $this->returnData('details', $role, 'success');
     }
 
     public function logout(Request $request)
