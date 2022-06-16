@@ -19,8 +19,8 @@ class LevelsController extends Controller
             $levelsCosts = Season_year::join("level_season_costs", "season_year_id", "=", "season_years.id")
                 ->join("levels", "levels.id", "=", "level_season_costs.level_id")
                 ->get([
-                    'levels.id as level_id', 'levels.level_name', 'levels.level_minAge', 'levels.level_maxAge',
-                    'season_years.id ','season_years.year', 'season_years.seasonStartDate', 'season_years.seasonEndDate',
+                    'levels.id', 'levels.level_name', 'levels.level_minAge', 'levels.level_maxAge',
+                    'season_years.year', 'season_years.seasonStartDate', 'season_years.seasonEndDate',
                     'level_season_costs.cost'
                 ]);
             return $this->returnData('Level', $levelsCosts, ' Levels and Cost details ');
