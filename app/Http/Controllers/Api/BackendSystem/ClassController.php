@@ -23,11 +23,11 @@ class ClassController extends Controller
             ->Join("teacher_classes", "teacher_classes.class_id", "=", "Kgclasses.id")
             ->Join("employees", "employees.id", "=", "teacher_classes.employee_id")
             ->get([
-                'levels.level_name', 'levels.level_minAge', 'levels.level_maxAge',
                 'Kgclasses.id as class_id','Kgclasses.class_name', 'Kgclasses.maxCapacity',
-                'employees.firstName as teacher_fname ','employees.lastName as teacher_lname' ,
+                'levels.level_name', 'levels.level_minAge', 'levels.level_maxAge',
+                'employees.firstName','employees.lastName' ,
             ])->all();
-            
+
             return $this->returnData('Classes', $classes, ' Classes details ');
         } catch (Throwable $e) {
             return $this->returnError('Something was wrong, please try again late');
