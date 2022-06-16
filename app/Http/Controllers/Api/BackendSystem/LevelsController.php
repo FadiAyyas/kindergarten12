@@ -12,7 +12,6 @@ use Throwable;
 class LevelsController extends Controller
 {
     use GeneralTrait;
-
     public function index()
     {
         try {
