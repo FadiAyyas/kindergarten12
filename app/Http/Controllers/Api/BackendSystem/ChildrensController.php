@@ -21,7 +21,16 @@ class ChildrensController extends Controller
     public function index()
     {
         try {
-            $details = Children::with('registration')->get();
+
+            $details = Children::Join("registrations", "registrations.child_id", "=", "childrens.id")
+            ->Join("Kgclasses", "Kgclasses.id", "=", "registrations.class_id")
+            ->Join("season_years", "season_years.id", "=", "registrations.season_year_id")
+            ->get([
+                'childrens.id','childrens.childName', 'childrens.birthDate','childrens.ChildImage','childrens.childAddress','childrens.medicalNotes',
+                'Kgclasses.id as class_id','Kgclasses.class_name',
+                'season_years.id as season_year_id','season_years.year','season_years.seasonStartDate' ,
+            ])->all();
+
             return $this->returnData('details', $details, ' Childrens details ');
         } catch (Throwable $e) {
             return $this->returnError('Something was wrong, please try again late');

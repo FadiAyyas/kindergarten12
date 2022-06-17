@@ -32,9 +32,18 @@ class BusesController extends Controller
     public function showBuses($Itinerary_id)
     {
         try {
-            $Itinerary = BusItinerary::findOrFail($Itinerary_id);
-            $details = $Itinerary->buses();
-            return $this->returnData('details', $details, ' Buses details');
+            $details = BusItinerary::join("buses", "buses.busItinerary_id", "=", "bus_itineraries.id")
+             ->join("employees", "employees.id", "=", "buses.employee_id")
+             ->where('bus_itineraries.id','=',$Itinerary_id)
+            ->get([
+                'buses.id', 'buses.driverName', 'buses.driverPhoneNumber', 'buses.busTypeName','buses.plateNumber',
+                'bus_itineraries.id as Itinerary_id ','bus_itineraries.itinerary', 'bus_itineraries.cost',
+                'employees.id as employee_id',
+                'employees.firstName',
+                'employees.lastName',
+            ]);
+
+            return $this->returnData('details', $details, ' Buses for Itinerary details');
         } catch (Throwable $e) {
             return $this->returnError('Something was wrong, please try again late');
         }

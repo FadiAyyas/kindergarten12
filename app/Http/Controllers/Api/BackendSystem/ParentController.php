@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api\BackendSystem;
 use App\Http\Controllers\Controller;
 use App\Models\ParentCh;
 use App\Models\ParentPhoneNumbers;
+use Illuminate\Http\Request;
 use Throwable;
 use App\Http\Traits\GeneralTrait;
 use App\Http\Requests\Backend\ParentsRequest;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -68,18 +68,20 @@ class ParentController extends Controller
     public function updateParentContactsDetails(Request $request, $phone_id)
     {
         try {
+
             $validator = Validator::make($request->all(), [
                 'type' => ['required', 'string'],
-                'phoneNumber' => ['required', 'numeric', 'max:16', 'min:6']
+                'phoneNumber' => ['required', 'numeric', 'min:6']
             ]);
+
             if ($validator->fails()) {
                 return $this->returnError($validator->errors());
-            } else {
-                $input = $request->only('type', 'phoneNumber');
-                $data = ParentPhoneNumbers::findOrFail($phone_id);
-                $data->update($input);
-                return $this->returnSuccessMessage('Parent Contact changed successfully ');
             }
+
+            $input = $request->only('type', 'phoneNumber');
+            $data = ParentPhoneNumbers::findOrFail($phone_id);
+            $data->update($input);
+            return $this->returnSuccessMessage('Parent Contact changed successfully ');
         } catch (Throwable $e) {
             return $this->returnError('Something was wrong, please try again late');
         }
