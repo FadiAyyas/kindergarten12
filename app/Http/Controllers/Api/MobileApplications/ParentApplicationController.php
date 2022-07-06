@@ -96,8 +96,8 @@ class ParentApplicationController extends Controller
                 ->join("registrations", "registrations.class_id", "=", "Kgclasses.id")
                 ->where('registrations.id', $registration->id)
                 ->first([
-                    'employees.firstName', 'employees.lastName', 'employees.photo',
-                    'employees.phoneNumber'
+                    'employees.id','employees.firstName', 'employees.lastName'
+                    , 'employees.photo','employees.phoneNumber'
                 ]);
 
             return $this->returnData('techer', $teacher, ' teacher');

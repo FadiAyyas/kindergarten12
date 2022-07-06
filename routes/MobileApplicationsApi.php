@@ -22,6 +22,11 @@ Route::group($credentialsAuthParent, function () {
     Route::post('/getActivitiesInfo', 'ParentApplicationController@getActivitiesInfo');
     Route::post('/getKgImages', 'ParentApplicationController@getKgImages');
     Route::post('/abcenseRecording', 'ParentApplicationController@abcenseRecording');
+    /* parent chat start */
+    Route::post('/sendParentMessage', 'ChatController@sendParentMessage');
+    Route::post('/getChatsForParent', 'ChatController@getChatsForParent');
+    Route::post('/getMessagesForParent/{employee_id}', 'ChatController@getMessagesForParent');
+    /* parent chat end */
     /* Parent application routes end */
 });
 
@@ -44,4 +49,10 @@ Route::group($credentialsAuthEmployee, function () {
     Route::post('/getBusItinerary', 'BusSupervisorApplicationController@getBusItinerary');
     Route::post('/getParentPhoneNumbers/{child_id}', 'BusSupervisorApplicationController@getParentPhoneNumbers');
     /* Bus Supervisor application routes end */
+
+    /* teacher chat start */
+    Route::post('/sendEmployeeMessage', 'ChatController@sendEmployeeMessage');
+    Route::post('/getChatsForTeacher', 'ChatController@getChatsForTeacher');
+    Route::post('/getMessagesForTeacher/{parent_id}', 'ChatController@getMessagesForTeacher');
+    /* teachaer chat end */
 });
