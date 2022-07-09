@@ -34,9 +34,8 @@ class EmployeeAuthController extends Controller
         } catch (JWTException $e) {
             return $this->returnError(201, 'Could not create token.');
         }
-
+        Arr::add($role, 'employee_id', Auth::user()->id);
         Arr::add($role, 'token', $token);
-
         return $this->returnData('details', $role, 'success');
     }
 

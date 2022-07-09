@@ -40,6 +40,7 @@ Route::group($credentialsAuthEmployee, function () {
     Route::post('/getClassChildren', 'TeacherApplicationController@getClassChildren');
     Route::post('/childAbsence', 'TeacherApplicationController@childAbsence');
     Route::post('/setChildEval', 'TeacherApplicationController@setChildEval');
+    Route::post('/sendNewEvalNotify', 'TeacherApplicationController@sendNewEvalNotify');
     Route::post('/getSeasonSubjects/{child_id}', 'TeacherApplicationController@getSeasonSubjects');
     Route::post('/setSubjectChildEval/{child_id}', 'TeacherApplicationController@setSubjectChildEval');
     /* Teacher application routes end */
@@ -48,6 +49,7 @@ Route::group($credentialsAuthEmployee, function () {
     Route::post('/getBusChildren', 'BusSupervisorApplicationController@getBusChildren');
     Route::post('/getBusItinerary', 'BusSupervisorApplicationController@getBusItinerary');
     Route::post('/getParentPhoneNumbers/{child_id}', 'BusSupervisorApplicationController@getParentPhoneNumbers');
+    Route::post('/sendBusNotify', 'BusSupervisorApplicationController@sendBusNotify');
     /* Bus Supervisor application routes end */
 
     /* teacher chat start */

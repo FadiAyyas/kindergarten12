@@ -36,7 +36,7 @@ class ParentApplicationController extends Controller
         }
     }
 
-    public function getChildInfo($child_id)
+    public function getChildInfo($child_id)//add class id
     {
         try {
             $season_year = Season_year::latest('id')->first();
@@ -48,8 +48,8 @@ class ParentApplicationController extends Controller
                 ->join("levels", "levels.id", "=", "Kgclasses.level_id")
                 ->where('registrations.id', $registration->id)
                 ->get([
-                    'childrens.id', 'childrens.childName', 'childrens.ChildImage',
-                    'Kgclasses.class_name', 'levels.level_name'
+                    'childrens.id as child_id', 'childrens.childName', 'childrens.ChildImage',
+                    'Kgclasses.id as class_id','Kgclasses.class_name', 'levels.level_name'
                 ]);
             return $this->returnData('childInfo', $children, ' children info');
         } catch (Throwable $e) {
@@ -85,7 +85,7 @@ class ParentApplicationController extends Controller
             return $this->returnError('هناك مشكلة ما , يرجى المحاولة مرة اخرى في وقت لاحق');
         }
     }
-    public function getTeacher($child_id)
+    public function getTeacher($child_id) //add employee id
     {
         try {
             $season_year = Season_year::latest('id')->first();

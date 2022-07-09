@@ -9,7 +9,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Traits\GeneralTrait;
 use App\Http\Requests\Backend\AuthRequest;
-
+use Illuminate\Support\Arr;
 use App\Models\ParentCh;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -33,7 +33,9 @@ class ParentAuthController extends Controller
         } catch (JWTException $e) {
             return $this->returnError(201, 'Could not create token.');
         }
-        return $this->returnData('token', $token, 'success');
+        $parent = ParentCh::select('id as parent_id')->where('id', Auth::user()->id)->first();
+        Arr::add($parent, 'token', $token);
+        return $this->returnData('parent', $parent, 'success');
     }
 
     public function logout(Request $request)
@@ -72,8 +74,8 @@ class ParentAuthController extends Controller
             'password_confirmation' => 'min:8'
         ]);
 
-        $Parent=Auth::user();
-        $ParentId= $Parent->id;
+        $Parent = Auth::user();
+        $ParentId = $Parent->id;
 
         if ($validator->fails()) {
             return $this->returnError($validator->errors());
@@ -84,5 +86,4 @@ class ParentAuthController extends Controller
             return $this->returnSuccessMessage(' Password  changed successfully ');
         }
     }
-
 }

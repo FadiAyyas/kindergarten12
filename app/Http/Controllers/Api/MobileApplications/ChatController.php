@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Api\MobileApplications;
 
+use App\Events\EmployeeChatListener;
+use App\Events\ParentChatListener;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MobileApplications\sendEmployeeMessageRequest;
 use App\Http\Requests\MobileApplications\sendParentMessageRequest;
 use App\Http\Traits\GeneralTrait;
 use App\Models\Chat;
 use App\Models\Employee;
+use App\Models\ParentCh;
 use App\Models\Registration;
 use App\Models\Season_year;
 use Illuminate\Support\Facades\Auth;
@@ -28,8 +31,12 @@ class ChatController extends Controller
                 'parent_id' => Auth::user()->id,
                 'employee_id' => $request->employee_id,
                 'from' => 'parent',
-                'to' => 'employee',
+                'to' => 'employee'
             ]);
+            $parent = ParentCh::where('id', Auth::user()->id)->first();
+
+            broadcast(new EmployeeChatListener($request->message, $request->employee_id, $parent));
+
             return $this->returnSuccessMessage('Message send successfully ');
         } catch (Throwable $e) {
             return $this->returnError('Something was wrong, please try again late');
@@ -86,6 +93,10 @@ class ChatController extends Controller
                 'from' => 'employee',
                 'to' => 'parent',
             ]);
+            $employee = Employee::where('id', Auth::user()->id)->first();
+
+            broadcast(new ParentChatListener($request->message, $request->parent_id, $employee));
+
             return $this->returnSuccessMessage('Message send successfully ');
         } catch (Throwable $e) {
             return $this->returnError('Something was wrong, please try again late');

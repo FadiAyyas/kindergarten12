@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\BackendSystem;
 
+use App\Events\NewActivityListener;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\ActivityRequest;
@@ -25,10 +26,10 @@ class ActivityController extends Controller
 
     public function store(ActivityRequest $request)
     {
-
         $input = $request->all();
         try {
-            Activity::create($input);
+            $activity = Activity::create($input);
+            broadcast(new NewActivityListener($activity));
             return $this->returnSuccessMessage('Activity created successfully ');
         } catch (Throwable $e) {
             return $this->returnError('Something was wrong, please try again late');

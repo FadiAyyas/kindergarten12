@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\MobileApplications;
 
+use App\Events\NewEvalNotify;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MobileApplications\childEvalRequest;
 use App\Http\Requests\MobileApplications\childSubjectEvalRequest;
@@ -15,6 +16,7 @@ use App\Models\ChildSubjectEval;
 use App\Models\Evaluation;
 use App\Models\Season_year;
 use App\Models\Subjects;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
@@ -171,6 +173,25 @@ class TeacherApplicationController extends Controller
                 }
                 return $this->returnSuccessMessage('تم تعديل التقييمات بنجاح');
             }
+        } catch (Throwable $e) {
+            return $this->returnError('هناك مشكلة ما , يرجى المحاولة مرة اخرى في وقت لاحق');
+        }
+    }
+    public function sendNewEvalNotify(Request $request)
+    {
+        try {
+            $class_id = Employee::join("teacher_classes", "teacher_classes.employee_id", "=", "employees.id")
+                ->join("Kgclasses", "Kgclasses.id", "=", "teacher_classes.class_id")
+                ->where('employees.id', Auth::user()->id)
+                ->get('Kgclasses.id')->first();
+
+            if ($request->message == null) {
+                return $this->returnError('The (message) field is required');
+            }
+
+            broadcast(new NewEvalNotify($request->message, $class_id->id));
+
+            return $this->returnSuccessMessage('تم إرسال الإشعار بنجاح');
         } catch (Throwable $e) {
             return $this->returnError('هناك مشكلة ما , يرجى المحاولة مرة اخرى في وقت لاحق');
         }
